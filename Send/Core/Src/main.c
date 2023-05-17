@@ -18,11 +18,13 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "adc.h"
 #include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "user_lib.h"
 
 /* USER CODE END Includes */
 
@@ -33,7 +35,6 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-extern UART_HandleTypeDef huart1;
 
 /* USER CODE END PD */
 
@@ -88,11 +89,8 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USART1_UART_Init();
+  MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
-  HAL_GPIO_WritePin(EBYTE_M0_GPIO_Port, EBYTE_M0_Pin, 1);
-  HAL_GPIO_WritePin(EBYTE_M0_GPIO_Port, EBYTE_M1_Pin, 0);
-  HAL_GPIO_WritePin(TEST_M0_GPIO_Port, TEST_M0_Pin, 1);
-  HAL_GPIO_WritePin(TEST_M0_GPIO_Port, TEST_M1_Pin, 1);
 
   /* USER CODE END 2 */
 
@@ -100,13 +98,20 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    HAL_ADC_Start(&hadc1);
+    if (HAL_ADC_PollForConversion(&hadc1, 100) == HAL_OK)
+    {
+      uint16_t adc = HAL_ADC_GetValue(&hadc1);
+      uint8_t dat[] = {adc>>8, adc&0xff};//{adc>>8, adc&0xff, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09};
+      HAL_UART_Transmit(&huart1, dat, 2, 10);
+    }
+    // uint8_t dat[] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09};
+    // HAL_UART_Transmit(&huart1, dat, 9, 10);
+    // HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, 1);
+    // HAL_Delay(1000);
+    // HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, 0);
     
-    uint8_t dat[] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09};
-    HAL_UART_Transmit(&huart1, dat, 9, 10);
-    HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, 1);
-    HAL_Delay(1000);
-    HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, 0);
-
+    
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -122,6 +127,7 @@ void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+  RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
 
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
@@ -145,6 +151,12 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC;
+  PeriphClkInit.AdcClockSelection = RCC_ADCPCLK2_DIV2;
+  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
   {
     Error_Handler();
   }
