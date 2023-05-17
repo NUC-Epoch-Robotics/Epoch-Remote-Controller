@@ -19,6 +19,8 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "adc.h"
+#include "dma.h"
+#include "tim.h"
 #include "usart.h"
 #include "gpio.h"
 
@@ -40,13 +42,13 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-
+#define ADC_CHN 4 //ADC1 开启的通道
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+uint32_t dmaDatBuf[ADC_CHN];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -88,30 +90,19 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_USART1_UART_Init();
   MX_ADC1_Init();
+  MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
-
+  HAL_ADC_Start_DMA(&hadc1, dmaDatBuf, ADC_CHN);
+  HAL_TIM_Base_Start(&htim3);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    HAL_ADC_Start(&hadc1);
-    if (HAL_ADC_PollForConversion(&hadc1, 100) == HAL_OK)
-    {
-      uint16_t adc = HAL_ADC_GetValue(&hadc1);
-      uint8_t dat[] = {adc>>8, adc&0xff};//{adc>>8, adc&0xff, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09};
-      HAL_UART_Transmit(&huart1, dat, 2, 10);
-    }
-    // uint8_t dat[] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09};
-    // HAL_UART_Transmit(&huart1, dat, 9, 10);
-    // HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, 1);
-    // HAL_Delay(1000);
-    // HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, 0);
-    
-    
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -163,6 +154,25 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+
+/**
+* @brief  Conversion complete callback in non blocking mode
+* @param  hadc: ADC handle
+* @retval None
+*/
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
+{
+  if (hadc->Instance == ADC1)
+  {
+    for (int i = 0; i < ADC_CHN; i++)
+    {
+      uint16_t adc = dmaDatBuf[i];
+      uint8_t dat[] = {adc>>8, adc&0xff};//{adc>>8, adc&0xff, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09};
+      HAL_UART_Transmit(&huart1, dat, 2, 10);
+    }
+  }
+}
+
 
 /* USER CODE END 4 */
 
