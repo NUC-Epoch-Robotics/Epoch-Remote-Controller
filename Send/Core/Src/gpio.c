@@ -50,16 +50,10 @@ void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(EBYTE_M0_GPIO_Port, EBYTE_M0_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOA, EBYTE_M0_Pin|EBYTE_M1_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(EBYTE_M1_GPIO_Port, EBYTE_M1_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(TEST_M0_GPIO_Port, TEST_M0_Pin, GPIO_PIN_SET);
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(TEST_M1_GPIO_Port, TEST_M1_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, TEST_M0_Pin|TEST_M1_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : PtPin */
   GPIO_InitStruct.Pin = KEY_Pin;

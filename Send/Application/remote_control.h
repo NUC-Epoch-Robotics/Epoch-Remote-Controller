@@ -21,7 +21,7 @@
 typedef struct
 {
   /* rocker channel information */
-	int16_t ch[5];
+	uint16_t ch[5];
   /* left and right lever information */
   char sw[2];
   uint8_t packed[18];

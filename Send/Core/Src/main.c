@@ -103,7 +103,7 @@ int main(void)
   while (1)
   {
     remote_control_transmit(&rc_info);
-    HAL_Delay(100);
+    HAL_Delay(10);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
