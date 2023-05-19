@@ -95,7 +95,7 @@ int main(void)
   MX_ADC1_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
-  remote_control_init();
+  remote_control_init(&rc_info);
   /* USER CODE END 2 */
 
   /* Infinite loop */
