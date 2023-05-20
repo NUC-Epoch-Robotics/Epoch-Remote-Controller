@@ -25,23 +25,34 @@
 #define ADC_CHN 4 // nummber of ADC channels
 #define ONE_ADC_PERIOD 0.05f // 多长时间ADC进行一次转换
 
-#define CHN_MIN 364
-#define CHN_MAX 1864
+#define CHN_RANGE 660
+#define CHN_MID 1024
+#define CHN_MIN (CHN_MID - CHN_RANGE)
+#define CHN_MAX (CHN_MID + CHN_RANGE)
 
 #define CHN0_MIN CHN_MIN
 #define CHN0_MAX CHN_MAX 
+#define CHN0_UP 4095
+#define CHN0_MID 3000
+#define CHN0_DOWN 485
 
 #define CHN1_MIN CHN_MIN
-#define CHN1_MAX CHN_MAX 
+#define CHN1_MAX CHN_MAX
+#define CHN1_UP 4095
+#define CHN1_MID 3000
+#define CHN1_DOWN 485
 
 #define CHN2_MIN CHN_MIN
 #define CHN2_MAX CHN_MAX
-#define CHN2_OFFSET (-700)
+#define CHN2_UP 4095
+#define CHN2_MID 3000
+#define CHN2_DOWN 0
 
 #define CHN3_MIN CHN_MIN
 #define CHN3_MAX CHN_MAX
-#define CHN3_OFFSET (-700)
-
+#define CHN3_UP 4095
+#define CHN3_MID 3000
+#define CHN3_DOWN 0
 
 #define ROCKER_LPF 0.01f
 /* Private  variables ---------------------------------------------------------*/
@@ -53,7 +64,6 @@ extern DMA_HandleTypeDef hdma_usart1_tx;
 /* Extern   function prototypes -----------------------------------------------*/
 /* Private  function prototypes -----------------------------------------------*/
 /* Private  functions ---------------------------------------------------------*/
-
 /**
   * @brief  遥控器初始化
   * @param None
@@ -76,6 +86,31 @@ void remote_control_init(rc_info_t *rc)
 
 
 /**
+  * @brief  摇杆映射
+  * @param in 摇杆原始数据
+  * @param up 摇杆上限
+  * @param mid 摇杆中间值
+  * @param down 摇杆下限
+  * @retval None
+  */
+int16_t rocker_correct(int16_t in, int16_t up, int16_t mid, int16_t down)
+{
+  
+  if (in >= mid)
+  {
+    in = (in - mid) * CHN_RANGE / (up - mid) + CHN_MID;
+  }
+  else if (in < mid)
+  {
+    in = (in - mid) * CHN_RANGE / (mid - down) + CHN_MID;
+  }
+
+  return in;
+
+}
+
+
+/**
   * @brief  通道原始数据处理，包括限幅、滤波等
   * @param ch 遥控器通道
   * @retval None
@@ -83,20 +118,15 @@ void remote_control_init(rc_info_t *rc)
 void channel_process(rc_info_t *rc)
 {
 
-  // 0、1通道没连接，置中
-  rc_info.ch[0] = 2048;
-  rc_info.ch[1] = 2048;
-
-  // 摇杆偏移，在中间的时候不是电位器的中间值
-  rc_info.ch[2] = rc_info.ch[2] + CHN2_OFFSET;
-  rc_info.ch[3] = rc_info.ch[3] + CHN3_OFFSET;
+  // 0通道没连接，置中
+  rc_info.ch[0] = CHN0_MID;
 
   // 摇杆数值映射
-  for (int i = 0; i < ADC_CHN; i++)
-  {
-    rc_info.ch[i] = rc_info.ch[i] * 0.32225 + 364; // (rc_info.ch[i]/2 - 1024) * (660/1024) + 1024
-  }
-
+  rc_info.ch[0] = rocker_correct(rc_info.ch[0], CHN0_UP, CHN0_MID, CHN0_DOWN);
+  rc_info.ch[1] = rocker_correct(rc_info.ch[1], CHN1_UP, CHN1_MID, CHN1_DOWN);
+  rc_info.ch[2] = rocker_correct(rc_info.ch[2], CHN2_UP, CHN2_MID, CHN2_DOWN);
+  rc_info.ch[3] = rocker_correct(rc_info.ch[3], CHN3_UP, CHN3_MID, CHN3_DOWN);
+  
   // 通道滤波
   for (int i = 0; i < ADC_CHN; i++)
   {
@@ -108,7 +138,6 @@ void channel_process(rc_info_t *rc)
   rc_info.ch[1] = int16_constrain(rc_info.ch[1], CHN1_MIN, CHN1_MAX);
   rc_info.ch[2] = int16_constrain(rc_info.ch[2], CHN2_MIN, CHN2_MAX);
   rc_info.ch[3] = int16_constrain(rc_info.ch[3], CHN3_MIN, CHN3_MAX);
-
 
 }
 
