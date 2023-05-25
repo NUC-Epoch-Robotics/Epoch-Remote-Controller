@@ -3,7 +3,7 @@
   * @file     remote_control.c
   * @author   Junshuo
   * @version  V1.0
-  * @date     2023-05-19
+  * @date     2023-05-25
   * @brief    遥控器发送
   ******************************************************************************
   * @attention
@@ -135,9 +135,6 @@ int16_t rocker_correct(int16_t in, int16_t up, int16_t mid, int16_t down)
 void channel_process(rc_info_t *rc)
 {
 
-  // 0通道没连接，置中
-  //rc_info.ch[0] = CHN0_MID;
-
   // 摇杆数值映射
   rc_info.ch[0] = rocker_correct(rc_info.ch[0], CHN0_UP, CHN0_MID, CHN0_DOWN);
   rc_info.ch[1] = rocker_correct(rc_info.ch[1], CHN1_UP, CHN1_MID, CHN1_DOWN);
@@ -230,5 +227,87 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
 
   }
 }
+
+
+/**
+  * @brief  This function handles EXTI interrupt request.
+  * @param  GPIO_Pin: Specifies the pins connected EXTI line
+  * @retval None
+  */
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+  if (GPIO_Pin == KEY_1_Pin)
+  {
+    rc_info.key[0] = HAL_GPIO_ReadPin(KEY_1_GPIO_Port, KEY_1_Pin);
+  }
+  else if (GPIO_Pin == KEY_2_Pin)
+  {
+    rc_info.key[1] = HAL_GPIO_ReadPin(KEY_2_GPIO_Port, KEY_2_Pin);
+  }
+  else if (GPIO_Pin == KEY_3_Pin)
+  {
+    rc_info.key[2] = HAL_GPIO_ReadPin(KEY_3_GPIO_Port, KEY_3_Pin);
+  }
+  else if (GPIO_Pin == KEY_4_Pin)
+  {
+    rc_info.key[3] = HAL_GPIO_ReadPin(KEY_4_GPIO_Port, KEY_4_Pin);
+  }
+  else if (GPIO_Pin == KEY_5_Pin)
+  {
+    rc_info.key[4] = HAL_GPIO_ReadPin(KEY_5_GPIO_Port, KEY_5_Pin);
+  }
+  else if (GPIO_Pin == KEY_6_Pin)
+  {
+    rc_info.key[5] = HAL_GPIO_ReadPin(KEY_6_GPIO_Port, KEY_6_Pin);
+  }
+  else if (GPIO_Pin == KEY_7_Pin)
+  {
+    rc_info.key[6] = HAL_GPIO_ReadPin(KEY_7_GPIO_Port, KEY_7_Pin);
+  }
+  else if (GPIO_Pin == KEY_8_Pin)
+  {
+    rc_info.key[7] = HAL_GPIO_ReadPin(KEY_8_GPIO_Port, KEY_8_Pin);
+  }
+  else if((GPIO_Pin == SW_1_1_Pin) | (GPIO_Pin == SW_1_2_Pin))
+  {
+    if ((HAL_GPIO_ReadPin(SW_1_1_GPIO_Port, SW_1_1_Pin) == GPIO_PIN_SET) && 
+        (HAL_GPIO_ReadPin(SW_1_2_GPIO_Port, SW_1_2_Pin) == GPIO_PIN_RESET))
+    {
+      rc_info.sw[0] = 3;
+    }
+    else if ((HAL_GPIO_ReadPin(SW_1_1_GPIO_Port, SW_1_1_Pin) == GPIO_PIN_RESET) && 
+             (HAL_GPIO_ReadPin(SW_1_2_GPIO_Port, SW_1_2_Pin) == GPIO_PIN_SET))
+    {
+      rc_info.sw[0] = 2;
+    }
+    else
+    {
+      rc_info.sw[0] = 1;
+    }
+  }
+  else if ((GPIO_Pin == SW_2_1_Pin) | (GPIO_Pin == SW_2_2_Pin))
+  {
+    if ((HAL_GPIO_ReadPin(SW_2_1_GPIO_Port, SW_2_1_Pin) == GPIO_PIN_SET) && 
+        (HAL_GPIO_ReadPin(SW_2_2_GPIO_Port, SW_2_2_Pin) == GPIO_PIN_RESET))
+    {
+      rc_info.sw[1] = 3;
+    }
+    else if ((HAL_GPIO_ReadPin(SW_2_1_GPIO_Port, SW_2_1_Pin) == GPIO_PIN_RESET) && 
+             (HAL_GPIO_ReadPin(SW_2_2_GPIO_Port, SW_2_2_Pin) == GPIO_PIN_SET))
+    {
+      rc_info.sw[1] = 2;
+    }
+    else
+    {
+      rc_info.sw[1] = 1;
+    }
+  }
+  else
+  {
+    // do nothing
+  }
+ 
+}
+
 
 /************************ (C) COPYRIGHT 2023 EPOCH *****END OF FILE****/

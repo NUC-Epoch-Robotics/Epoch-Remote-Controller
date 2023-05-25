@@ -75,12 +75,16 @@ void Error_Handler(void);
 #define LED_1_GPIO_Port GPIOB
 #define KEY_5_Pin GPIO_PIN_12
 #define KEY_5_GPIO_Port GPIOB
+#define KEY_5_EXTI_IRQn EXTI15_10_IRQn
 #define KEY_6_Pin GPIO_PIN_13
 #define KEY_6_GPIO_Port GPIOB
+#define KEY_6_EXTI_IRQn EXTI15_10_IRQn
 #define KEY_7_Pin GPIO_PIN_14
 #define KEY_7_GPIO_Port GPIOB
+#define KEY_7_EXTI_IRQn EXTI15_10_IRQn
 #define KEY_8_Pin GPIO_PIN_15
 #define KEY_8_GPIO_Port GPIOB
+#define KEY_8_EXTI_IRQn EXTI15_10_IRQn
 #define SW_1_1_Pin GPIO_PIN_6
 #define SW_1_1_GPIO_Port GPIOC
 #define SW_1_2_Pin GPIO_PIN_7
@@ -99,12 +103,16 @@ void Error_Handler(void);
 #define KEY_ROCKER_GPIO_Port GPIOA
 #define KEY_1_Pin GPIO_PIN_6
 #define KEY_1_GPIO_Port GPIOB
+#define KEY_1_EXTI_IRQn EXTI9_5_IRQn
 #define KEY_2_Pin GPIO_PIN_7
 #define KEY_2_GPIO_Port GPIOB
+#define KEY_2_EXTI_IRQn EXTI9_5_IRQn
 #define KEY_3_Pin GPIO_PIN_8
 #define KEY_3_GPIO_Port GPIOB
+#define KEY_3_EXTI_IRQn EXTI9_5_IRQn
 #define KEY_4_Pin GPIO_PIN_9
 #define KEY_4_GPIO_Port GPIOB
+#define KEY_4_EXTI_IRQn EXTI9_5_IRQn
 
 /* USER CODE BEGIN Private defines */
 
