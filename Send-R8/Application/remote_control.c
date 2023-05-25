@@ -22,43 +22,60 @@
 /* Private  typedef -----------------------------------------------------------*/
 /* Private  define ------------------------------------------------------------*/
 /* Private  macro -------------------------------------------------------------*/
-#define ADC_CHN 4 // nummber of ADC channels
+#define ADC_CHN 7 // nummber of ADC channels
 #define ONE_ADC_PERIOD 0.05f // 多长时间ADC进行一次转换
 
 #define CHN_RANGE 660
 #define CHN_MID 1024
 #define CHN_MIN (CHN_MID - CHN_RANGE)
 #define CHN_MAX (CHN_MID + CHN_RANGE)
-
-#define CHN0_MIN CHN_MIN
-#define CHN0_MAX CHN_MAX 
-#define CHN0_UP 4095
-#define CHN0_MID 2048
-#define CHN0_DOWN 0
-
+// 右侧-航模摇杆-X 
+#define CHN1_ADC_IN 5
 #define CHN1_MIN CHN_MIN
 #define CHN1_MAX CHN_MAX
 #define CHN1_UP 4095
 #define CHN1_MID 2048
 #define CHN1_DOWN 0
-
+// 右侧-航模摇杆-Y
+#define CHN2_ADC_IN 6
 #define CHN2_MIN CHN_MIN
 #define CHN2_MAX CHN_MAX
 #define CHN2_UP 4095
 #define CHN2_MID 2048
 #define CHN2_DOWN 0
-
+// 左侧-四维摇杆-X
+#define CHN3_ADC_IN 3
 #define CHN3_MIN CHN_MIN
 #define CHN3_MAX CHN_MAX
 #define CHN3_UP 4095
 #define CHN3_MID 2048
 #define CHN3_DOWN 0
+// 左侧-四维摇杆-Y
+#define CHN4_ADC_IN 4
+#define CHN4_MIN CHN_MIN
+#define CHN4_MAX CHN_MAX
+#define CHN4_UP 4095
+#define CHN4_MID 2048
+#define CHN4_DOWN 0
+// 左侧-四维摇杆-Z
+#define CHN0_ADC_IN 1
+#define CHN0_MIN CHN_MIN
+#define CHN0_MAX CHN_MAX 
+#define CHN0_UP 4095
+#define CHN0_MID 2048
+#define CHN0_DOWN 0
+// 左侧-电位器
+#define CHN5_ADC_IN 2
+// 右侧-电位器
+#define CHN6_ADC_IN 7
 
+//摇杆滤波系数
 #define ROCKER_LPF 0.01f
 /* Private  variables ---------------------------------------------------------*/
 uint32_t stickDatBuf[ADC_CHN]; //摇杆通道采集
 rc_info_t rc_info;
 
+static const uint8_t CHN_ADC_IN[7] = {CHN0_ADC_IN, CHN1_ADC_IN, CHN2_ADC_IN, CHN3_ADC_IN, CHN4_ADC_IN, CHN5_ADC_IN, CHN6_ADC_IN};
 /* Extern   variables ---------------------------------------------------------*/
 extern DMA_HandleTypeDef hdma_usart1_tx;
 /* Extern   function prototypes -----------------------------------------------*/
@@ -148,31 +165,33 @@ void channel_process(rc_info_t *rc)
   * @param buff 遥控器控制帧
   * @retval None
   */
-void remote_control_packup(uint16_t* ch, uint8_t* buff)
+void remote_control_packup(uint16_t* ch, char* key, char* sw, uint8_t* buff)
 {
   if (ch == NULL || buff == NULL)
   {
     return;
   }
 
-  buff[0] = ch[0] & 0xFF;                                     // 通道0低8位
-  buff[1] = ((ch[0] >> 8) & 0x07) | ((ch[1] << 3) & 0xF8);    // 通道0高3位 + 通道1低5位
-  buff[2] = ((ch[1] >> 5) & 0x3F) | ((ch[2] << 6) & 0xC0);    // 通道1高6位 + 通道2低2位
-  buff[3] = (ch[2] >> 2) & 0xFF;                              // 通道2中间8位
-  buff[4] = ((ch[2] >> 10) & 0x01) | ((ch[3] << 1) & 0xFE);   // 通道2高1位 + 通道3低7位
-  buff[5] = ((ch[3] >> 7) & 0x0F) | (0x00 & 0xF0);            // 通道3高4位 + 4位填充
-  buff[6] = 0x00; // 填充字节
-  buff[7] = 0x00; // 填充字节
-  buff[8] = 0x00; // 填充字节
-  buff[9] = 0x00; // 填充字节
-  buff[10] = 0x00; // 填充字节
-  buff[11] = 0x00; // 填充字节
-  buff[12] = 0x00; // 填充字节
-  buff[13] = 0x00; // 填充字节
-  buff[14] = 0x00; // 填充字节
-  buff[15] = 0x00; // 填充字节
-  buff[16] = 0x00; // 填充字节
-  buff[17] = 0x00; // 填充字节
+  buff[0] = ch[1] & 0xFF;                                     // 通道1低8位
+  buff[1] = ((ch[1] >> 8) & 0x07) | ((ch[2] << 3) & 0xF8);    // 通道1高3位 + 通道2低5位
+  buff[2] = ((ch[2] >> 5) & 0x3F) | ((ch[3] << 6) & 0xC0);    // 通道2高6位 + 通道3低2位
+  buff[3] = (ch[3] >> 2) & 0xFF;                              // 通道3中间8位
+  buff[4] = ((ch[3] >> 10) & 0x01) | ((ch[4] << 1) & 0xFE);   // 通道3高1位 + 通道4低7位               
+  buff[5] = ((ch[4] >> 7) & 0x0F) | 
+            ((sw[0] << 4) & 0x30) | ((sw[1] << 6) & 0xC0);    // 通道4高4位 + SW-1 + SW-2
+  buff[6] = ch[5] & 0xFF;                                     // 通道5低8位
+  buff[7] = ((ch[5] >> 8) & 0x07);                            // 通道5高3位
+  buff[8] = ch[6] & 0xFF;                                     // 通道6低8位
+  buff[9] = ((ch[6] >> 8) & 0x07);                            // 通道6高3位
+  buff[10] = 0x00;                                            // 填充字节
+  buff[11] = 0x00;                                            // 填充字节
+  buff[12] = 0x00;                                            // 填充字节
+  buff[13] = 0x00;                                            // 填充字节
+  buff[14] = (key[0]<<7) | (key[1]<<6) | (key[2]<<5) | (key[3]<<4) |
+             (key[4]<<3) | (key[5]<<2) | (key[6]<<1) | key[7];// 8个按键
+  buff[15] = 0x00;                                            // 填充字节
+  buff[16] = ch[0] & 0xFF;                                    // 通道0低8位
+  buff[17] = ((ch[0] >> 8) & 0x07);                           // 通道0高3位
 
 }
 
@@ -185,7 +204,7 @@ void remote_control_packup(uint16_t* ch, uint8_t* buff)
 void remote_control_transmit(rc_info_t *rc)
 {
   
-  remote_control_packup(rc->ch, rc->packed);
+  remote_control_packup(rc->ch, rc->key, rc->sw, rc->packed);
   HAL_UART_Transmit(&huart1, rc->packed, 18, 20); //使用阻塞式发送，保证每帧都发送成功
   //后续可以改成DMA发送，但是我没弄成功
 
@@ -204,7 +223,7 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
     // 将ADC采集到的数据处理成摇杆通道数值
     for (int i = 0; i < ADC_CHN; i++)
     {
-      rc_info.ch[i] = stickDatBuf[i];
+      rc_info.ch[i] = stickDatBuf[CHN_ADC_IN[i] - 1];
     }
     channel_process(&rc_info);
 

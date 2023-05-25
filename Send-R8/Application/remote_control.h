@@ -22,9 +22,9 @@
 typedef struct
 {
 	// 遥控器通道值
-  int16_t ch[4]; // 摇杆通道采集
+  int16_t ch[7];  // 摇杆&电位器通道采集
   char sw[2];     // 拨码开关
-  char key[2];    // 按键
+  char key[8];    // 按键
 
   // 打包数据
   uint8_t packed[18];
