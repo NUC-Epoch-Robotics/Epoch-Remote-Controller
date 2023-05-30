@@ -61,9 +61,9 @@
 #define CHN0_ADC_IN 1
 #define CHN0_MIN CHN_MIN
 #define CHN0_MAX CHN_MAX 
-#define CHN0_UP 4095
-#define CHN0_MID 2048
-#define CHN0_DOWN 0
+#define CHN0_UP 3990
+#define CHN0_MID 1570
+#define CHN0_DOWN 313
 // 左侧-电位器
 #define CHN5_ADC_IN 2
 // 右侧-电位器
@@ -188,7 +188,7 @@ void remote_control_packup(uint16_t* ch, char* key, char* sw, uint8_t* buff)
   buff[13] = 0x00;                                            // 填充字节
   buff[14] = (key[0]<<7) | (key[1]<<6) | (key[2]<<5) | (key[3]<<4) |
              (key[4]<<3) | (key[5]<<2) | (key[6]<<1) | key[7];// 8个按键
-  buff[15] = 0x00;                                            // 填充字节
+  buff[15] = key[8];                                          // 四维摇杆按键
   buff[16] = ch[0] & 0xFF;                                    // 通道0低8位
   buff[17] = ((ch[0] >> 8) & 0x07);                           // 通道0高3位
 
@@ -269,6 +269,10 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
   else if (GPIO_Pin == KEY_8_Pin)
   {
     rc_info.key[7] = HAL_GPIO_ReadPin(KEY_8_GPIO_Port, KEY_8_Pin);
+  }
+  else if (GPIO_Pin == KEY_ROCKER_Pin)
+  {
+    rc_info.key[8] = HAL_GPIO_ReadPin(KEY_ROCKER_GPIO_Port, KEY_ROCKER_Pin);
   }
   else if((GPIO_Pin == SW_1_1_Pin) | (GPIO_Pin == SW_1_2_Pin))
   {
