@@ -8,7 +8,7 @@ Remote controller for Robocon 2023
 ## 发送控制指令
 控制帧结构
 
-![控制帧结构](img/control.png)
+![控制帧结构](img/control_frame.png)
 
 ## 监控机器人状态
 TODO
