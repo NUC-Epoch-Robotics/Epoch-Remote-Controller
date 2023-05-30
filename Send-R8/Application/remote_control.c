@@ -140,7 +140,8 @@ void channel_process(rc_info_t *rc)
   rc_info.ch[1] = rocker_correct(rc_info.ch[1], CHN1_UP, CHN1_MID, CHN1_DOWN);
   rc_info.ch[2] = rocker_correct(rc_info.ch[2], CHN2_UP, CHN2_MID, CHN2_DOWN);
   rc_info.ch[3] = rocker_correct(rc_info.ch[3], CHN3_UP, CHN3_MID, CHN3_DOWN);
-  
+  rc_info.ch[4] = rocker_correct(rc_info.ch[4], CHN4_UP, CHN4_MID, CHN4_DOWN);
+
   // 通道滤波
   for (int i = 0; i < ADC_CHN; i++)
   {
@@ -152,6 +153,7 @@ void channel_process(rc_info_t *rc)
   rc_info.ch[1] = int16_constrain(rc_info.ch[1], CHN1_MIN, CHN1_MAX);
   rc_info.ch[2] = int16_constrain(rc_info.ch[2], CHN2_MIN, CHN2_MAX);
   rc_info.ch[3] = int16_constrain(rc_info.ch[3], CHN3_MIN, CHN3_MAX);
+  rc_info.ch[4] = int16_constrain(rc_info.ch[4], CHN4_MIN, CHN4_MAX);
 
 }
 
