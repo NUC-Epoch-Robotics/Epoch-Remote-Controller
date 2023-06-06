@@ -274,40 +274,6 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
   {
     rc_info.key[8] = HAL_GPIO_ReadPin(KEY_ROCKER_GPIO_Port, KEY_ROCKER_Pin);
   }
-  else if((GPIO_Pin == SW_1_1_Pin) | (GPIO_Pin == SW_1_2_Pin))
-  {
-    if ((HAL_GPIO_ReadPin(SW_1_1_GPIO_Port, SW_1_1_Pin) == GPIO_PIN_SET) && 
-        (HAL_GPIO_ReadPin(SW_1_2_GPIO_Port, SW_1_2_Pin) == GPIO_PIN_RESET))
-    {
-      rc_info.sw[0] = 3;
-    }
-    else if ((HAL_GPIO_ReadPin(SW_1_1_GPIO_Port, SW_1_1_Pin) == GPIO_PIN_RESET) && 
-             (HAL_GPIO_ReadPin(SW_1_2_GPIO_Port, SW_1_2_Pin) == GPIO_PIN_SET))
-    {
-      rc_info.sw[0] = 2;
-    }
-    else
-    {
-      rc_info.sw[0] = 1;
-    }
-  }
-  else if ((GPIO_Pin == SW_2_1_Pin) | (GPIO_Pin == SW_2_2_Pin))
-  {
-    if ((HAL_GPIO_ReadPin(SW_2_1_GPIO_Port, SW_2_1_Pin) == GPIO_PIN_SET) && 
-        (HAL_GPIO_ReadPin(SW_2_2_GPIO_Port, SW_2_2_Pin) == GPIO_PIN_RESET))
-    {
-      rc_info.sw[1] = 3;
-    }
-    else if ((HAL_GPIO_ReadPin(SW_2_1_GPIO_Port, SW_2_1_Pin) == GPIO_PIN_RESET) && 
-             (HAL_GPIO_ReadPin(SW_2_2_GPIO_Port, SW_2_2_Pin) == GPIO_PIN_SET))
-    {
-      rc_info.sw[1] = 2;
-    }
-    else
-    {
-      rc_info.sw[1] = 1;
-    }
-  }
   else
   {
     // do nothing

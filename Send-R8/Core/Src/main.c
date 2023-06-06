@@ -115,6 +115,38 @@ int main(void)
   while (1)
   {
     remote_control_transmit(&rc_info);
+  
+
+    if ((HAL_GPIO_ReadPin(SW_1_1_GPIO_Port, SW_1_1_Pin) == GPIO_PIN_SET) && 
+        (HAL_GPIO_ReadPin(SW_1_2_GPIO_Port, SW_1_2_Pin) == GPIO_PIN_RESET))
+    {
+      rc_info.sw[0] = 3;
+    }
+    else if ((HAL_GPIO_ReadPin(SW_1_1_GPIO_Port, SW_1_1_Pin) == GPIO_PIN_RESET) && 
+            (HAL_GPIO_ReadPin(SW_1_2_GPIO_Port, SW_1_2_Pin) == GPIO_PIN_SET))
+    {
+      rc_info.sw[0] = 2;
+    }
+    else
+    {
+      rc_info.sw[0] = 1;
+    }
+
+
+    if ((HAL_GPIO_ReadPin(SW_2_1_GPIO_Port, SW_2_1_Pin) == GPIO_PIN_SET) && 
+        (HAL_GPIO_ReadPin(SW_2_2_GPIO_Port, SW_2_2_Pin) == GPIO_PIN_RESET))
+    {
+      rc_info.sw[1] = 3;
+    }
+    else if ((HAL_GPIO_ReadPin(SW_2_1_GPIO_Port, SW_2_1_Pin) == GPIO_PIN_RESET) && 
+            (HAL_GPIO_ReadPin(SW_2_2_GPIO_Port, SW_2_2_Pin) == GPIO_PIN_SET))
+    {
+      rc_info.sw[1] = 2;
+    }
+    else
+    {
+      rc_info.sw[1] = 1;
+    }
 
 
     HAL_Delay(10);
