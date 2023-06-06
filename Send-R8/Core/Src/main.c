@@ -97,6 +97,7 @@ int main(void)
   MX_TIM3_Init();
   MX_SPI1_Init();
   MX_USART3_UART_Init();
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
   remote_control_init(&rc_info);
   rc_info.key[0] = HAL_GPIO_ReadPin(KEY_1_GPIO_Port, KEY_1_Pin);
@@ -116,39 +117,6 @@ int main(void)
   {
     remote_control_transmit(&rc_info);
   
-
-    if ((HAL_GPIO_ReadPin(SW_1_1_GPIO_Port, SW_1_1_Pin) == GPIO_PIN_SET) && 
-        (HAL_GPIO_ReadPin(SW_1_2_GPIO_Port, SW_1_2_Pin) == GPIO_PIN_RESET))
-    {
-      rc_info.sw[0] = 3;
-    }
-    else if ((HAL_GPIO_ReadPin(SW_1_1_GPIO_Port, SW_1_1_Pin) == GPIO_PIN_RESET) && 
-            (HAL_GPIO_ReadPin(SW_1_2_GPIO_Port, SW_1_2_Pin) == GPIO_PIN_SET))
-    {
-      rc_info.sw[0] = 2;
-    }
-    else
-    {
-      rc_info.sw[0] = 1;
-    }
-
-
-    if ((HAL_GPIO_ReadPin(SW_2_1_GPIO_Port, SW_2_1_Pin) == GPIO_PIN_SET) && 
-        (HAL_GPIO_ReadPin(SW_2_2_GPIO_Port, SW_2_2_Pin) == GPIO_PIN_RESET))
-    {
-      rc_info.sw[1] = 3;
-    }
-    else if ((HAL_GPIO_ReadPin(SW_2_1_GPIO_Port, SW_2_1_Pin) == GPIO_PIN_RESET) && 
-            (HAL_GPIO_ReadPin(SW_2_2_GPIO_Port, SW_2_2_Pin) == GPIO_PIN_SET))
-    {
-      rc_info.sw[1] = 2;
-    }
-    else
-    {
-      rc_info.sw[1] = 1;
-    }
-
-
     HAL_Delay(10);
     /* USER CODE END WHILE */
 

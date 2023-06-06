@@ -97,7 +97,8 @@ void remote_control_init(rc_info_t *rc)
   }
 
   HAL_ADC_Start_DMA(&hadc1, stickDatBuf, ADC_CHN);
-  HAL_TIM_Base_Start(&htim3);
+  HAL_TIM_Base_Start(&htim3);    // TIM3用于触发ACD采样
+  HAL_TIM_Base_Start_IT(&htim2); // TIM2用于拉起检测钮子开关
 
 }
 
@@ -279,6 +280,18 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
     // do nothing
   }
  
+}
+
+
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  if (htim->Instance == TIM2)
+  {
+    rc_info.sw[0] = HAL_GPIO_ReadPin(SW_1_1_GPIO_Port, SW_1_1_Pin) | (HAL_GPIO_ReadPin(SW_1_2_GPIO_Port, SW_1_2_Pin) << 1);
+    rc_info.sw[1] = HAL_GPIO_ReadPin(SW_2_1_GPIO_Port, SW_2_1_Pin) | (HAL_GPIO_ReadPin(SW_2_2_GPIO_Port, SW_2_2_Pin) << 1);
+  }
+
 }
 
 
