@@ -100,15 +100,15 @@ int main(void)
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
   remote_control_init(&rc_info);
-  rc_info.key[0] = HAL_GPIO_ReadPin(KEY_1_GPIO_Port, KEY_1_Pin);
-  rc_info.key[1] = HAL_GPIO_ReadPin(KEY_2_GPIO_Port, KEY_2_Pin);
-  rc_info.key[2] = HAL_GPIO_ReadPin(KEY_3_GPIO_Port, KEY_3_Pin);
-  rc_info.key[3] = HAL_GPIO_ReadPin(KEY_4_GPIO_Port, KEY_4_Pin);
-  rc_info.key[4] = HAL_GPIO_ReadPin(KEY_5_GPIO_Port, KEY_5_Pin);
-  rc_info.key[5] = HAL_GPIO_ReadPin(KEY_6_GPIO_Port, KEY_6_Pin);
-  rc_info.key[6] = HAL_GPIO_ReadPin(KEY_7_GPIO_Port, KEY_7_Pin);
-  rc_info.key[7] = HAL_GPIO_ReadPin(KEY_8_GPIO_Port, KEY_8_Pin);
-  rc_info.key[8] = HAL_GPIO_ReadPin(KEY_ROCKER_GPIO_Port, KEY_ROCKER_Pin);
+  rc_info.key[0] = !HAL_GPIO_ReadPin(KEY_1_GPIO_Port, KEY_1_Pin);
+  rc_info.key[1] = !HAL_GPIO_ReadPin(KEY_2_GPIO_Port, KEY_2_Pin);
+  rc_info.key[2] = !HAL_GPIO_ReadPin(KEY_3_GPIO_Port, KEY_3_Pin);
+  rc_info.key[3] = !HAL_GPIO_ReadPin(KEY_4_GPIO_Port, KEY_4_Pin);
+  rc_info.key[4] = !HAL_GPIO_ReadPin(KEY_5_GPIO_Port, KEY_5_Pin);
+  rc_info.key[5] = !HAL_GPIO_ReadPin(KEY_6_GPIO_Port, KEY_6_Pin);
+  rc_info.key[6] = !HAL_GPIO_ReadPin(KEY_7_GPIO_Port, KEY_7_Pin);
+  rc_info.key[7] = !HAL_GPIO_ReadPin(KEY_8_GPIO_Port, KEY_8_Pin);
+  rc_info.key[8] = !HAL_GPIO_ReadPin(KEY_ROCKER_GPIO_Port, KEY_ROCKER_Pin);
   /* USER CODE END 2 */
 
   /* Infinite loop */

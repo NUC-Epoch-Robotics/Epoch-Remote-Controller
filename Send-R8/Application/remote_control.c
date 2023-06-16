@@ -241,39 +241,39 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
   if (GPIO_Pin == KEY_1_Pin)
   {
-    rc_info.key[0] = HAL_GPIO_ReadPin(KEY_1_GPIO_Port, KEY_1_Pin);
+    rc_info.key[0] = !HAL_GPIO_ReadPin(KEY_1_GPIO_Port, KEY_1_Pin);
   }
   else if (GPIO_Pin == KEY_2_Pin)
   {
-    rc_info.key[1] = HAL_GPIO_ReadPin(KEY_2_GPIO_Port, KEY_2_Pin);
+    rc_info.key[1] = !HAL_GPIO_ReadPin(KEY_2_GPIO_Port, KEY_2_Pin);
   }
   else if (GPIO_Pin == KEY_3_Pin)
   {
-    rc_info.key[2] = HAL_GPIO_ReadPin(KEY_3_GPIO_Port, KEY_3_Pin);
+    rc_info.key[2] = !HAL_GPIO_ReadPin(KEY_3_GPIO_Port, KEY_3_Pin);
   }
   else if (GPIO_Pin == KEY_4_Pin)
   {
-    rc_info.key[3] = HAL_GPIO_ReadPin(KEY_4_GPIO_Port, KEY_4_Pin);
+    rc_info.key[3] = !HAL_GPIO_ReadPin(KEY_4_GPIO_Port, KEY_4_Pin);
   }
   else if (GPIO_Pin == KEY_5_Pin)
   {
-    rc_info.key[4] = HAL_GPIO_ReadPin(KEY_5_GPIO_Port, KEY_5_Pin);
+    rc_info.key[4] = !HAL_GPIO_ReadPin(KEY_5_GPIO_Port, KEY_5_Pin);
   }
   else if (GPIO_Pin == KEY_6_Pin)
   {
-    rc_info.key[5] = HAL_GPIO_ReadPin(KEY_6_GPIO_Port, KEY_6_Pin);
+    rc_info.key[5] = !HAL_GPIO_ReadPin(KEY_6_GPIO_Port, KEY_6_Pin);
   }
   else if (GPIO_Pin == KEY_7_Pin)
   {
-    rc_info.key[6] = HAL_GPIO_ReadPin(KEY_7_GPIO_Port, KEY_7_Pin);
+    rc_info.key[6] = !HAL_GPIO_ReadPin(KEY_7_GPIO_Port, KEY_7_Pin);
   }
   else if (GPIO_Pin == KEY_8_Pin)
   {
-    rc_info.key[7] = HAL_GPIO_ReadPin(KEY_8_GPIO_Port, KEY_8_Pin);
+    rc_info.key[7] = !HAL_GPIO_ReadPin(KEY_8_GPIO_Port, KEY_8_Pin);
   }
   else if (GPIO_Pin == KEY_ROCKER_Pin)
   {
-    rc_info.key[8] = HAL_GPIO_ReadPin(KEY_ROCKER_GPIO_Port, KEY_ROCKER_Pin);
+    rc_info.key[8] = !HAL_GPIO_ReadPin(KEY_ROCKER_GPIO_Port, KEY_ROCKER_Pin);
   }
   else
   {
@@ -288,8 +288,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
   if (htim->Instance == TIM2)
   {
-    rc_info.sw[0] = HAL_GPIO_ReadPin(SW_1_1_GPIO_Port, SW_1_1_Pin) | (HAL_GPIO_ReadPin(SW_1_2_GPIO_Port, SW_1_2_Pin) << 1);
-    rc_info.sw[1] = HAL_GPIO_ReadPin(SW_2_1_GPIO_Port, SW_2_1_Pin) | (HAL_GPIO_ReadPin(SW_2_2_GPIO_Port, SW_2_2_Pin) << 1);
+    rc_info.sw[0] = !HAL_GPIO_ReadPin(SW_1_1_GPIO_Port, SW_1_1_Pin) | (!(HAL_GPIO_ReadPin(SW_1_2_GPIO_Port, SW_1_2_Pin)) << 1);
+    rc_info.sw[1] = !HAL_GPIO_ReadPin(SW_2_1_GPIO_Port, SW_2_1_Pin) | (!(HAL_GPIO_ReadPin(SW_2_2_GPIO_Port, SW_2_2_Pin)) << 1);
   }
 
 }
