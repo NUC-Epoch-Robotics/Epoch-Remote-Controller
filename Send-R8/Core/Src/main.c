@@ -117,7 +117,7 @@ int main(void)
   {
     remote_control_transmit(&rc_info);
   
-    HAL_Delay(10);
+    HAL_Delay(20);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

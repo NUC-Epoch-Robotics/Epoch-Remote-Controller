@@ -33,15 +33,15 @@
 #define CHN1_ADC_IN 5
 #define CHN1_MIN CHN_MIN
 #define CHN1_MAX CHN_MAX
-#define CHN1_UP 4095
-#define CHN1_MID 2048
+#define CHN1_UP 4020
+#define CHN1_MID 1900
 #define CHN1_DOWN 0
 // 右侧-航模摇杆-Y
 #define CHN2_ADC_IN 6
 #define CHN2_MIN CHN_MIN
 #define CHN2_MAX CHN_MAX
-#define CHN2_UP 4095
-#define CHN2_MID 2048
+#define CHN2_UP 4020
+#define CHN2_MID 2000
 #define CHN2_DOWN 0
 // 左侧-四维摇杆-X
 #define CHN3_ADC_IN 3
