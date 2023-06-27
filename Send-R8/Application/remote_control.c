@@ -29,41 +29,41 @@
 #define CHN_MID 1024
 #define CHN_MIN (CHN_MID - CHN_RANGE)
 #define CHN_MAX (CHN_MID + CHN_RANGE)
-// 右侧-航模摇杆-X 
+// 左侧-四维摇杆-Z
+#define CHN0_ADC_IN 1
+#define CHN0_MIN CHN_MIN
+#define CHN0_MAX CHN_MAX 
+#define CHN0_UP 4018
+#define CHN0_MID 1800
+#define CHN0_DOWN 500
+// 左侧-四维摇杆-X
 #define CHN1_ADC_IN 5
 #define CHN1_MIN CHN_MIN
 #define CHN1_MAX CHN_MAX
-#define CHN1_UP 4020
-#define CHN1_MID 1900
+#define CHN1_UP 4026
+#define CHN1_MID 1950
 #define CHN1_DOWN 0
-// 右侧-航模摇杆-Y
+// 左侧-四维摇杆-Y
 #define CHN2_ADC_IN 6
 #define CHN2_MIN CHN_MIN
 #define CHN2_MAX CHN_MAX
 #define CHN2_UP 4020
 #define CHN2_MID 2000
 #define CHN2_DOWN 0
-// 左侧-四维摇杆-X
+// 右侧-航模摇杆-X 
 #define CHN3_ADC_IN 3
 #define CHN3_MIN CHN_MIN
 #define CHN3_MAX CHN_MAX
-#define CHN3_UP 4095
-#define CHN3_MID 2048
+#define CHN3_UP 2600
+#define CHN3_MID 1800
 #define CHN3_DOWN 0
-// 左侧-四维摇杆-Y
+// 右侧-航模摇杆-Y
 #define CHN4_ADC_IN 4
 #define CHN4_MIN CHN_MIN
 #define CHN4_MAX CHN_MAX
-#define CHN4_UP 4095
-#define CHN4_MID 2048
+#define CHN4_UP 4030
+#define CHN4_MID 1940
 #define CHN4_DOWN 0
-// 左侧-四维摇杆-Z
-#define CHN0_ADC_IN 1
-#define CHN0_MIN CHN_MIN
-#define CHN0_MAX CHN_MAX 
-#define CHN0_UP 3990
-#define CHN0_MID 1570
-#define CHN0_DOWN 313
 // 左侧-电位器
 #define CHN5_ADC_IN 2
 // 右侧-电位器
